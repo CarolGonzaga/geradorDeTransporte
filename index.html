@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Planilha</title>
+
+    <!-- ESTILO -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- EXTERNOS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+
+    <!-- FONTE -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Gerador de Transporte</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle" />
+                    <div class="slider">
+                        <div class="circle">
+                            <i class="fa-solid fa-sun icon sun"></i>
+                            <i class="fa-solid fa-moon icon moon"></i>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </header>
+
+        <nav class="nav-controls">
+            <div class="tab-nav">
+                <button class="tab-link active" data-tab="1">Pacote e iFlow</button>
+                <button class="tab-link" data-tab="2">API Management</button>
+                <button class="tab-link" data-tab="3">Credenciais e Roles</button>
+                <button class="tab-link" data-tab="4">Configure</button>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" id="uploadButton" class="action-btn">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+                <button type="button" id="clearForm" class="action-btn">
+                    <i class="fa-solid fa-eraser"></i>
+                </button>
+                <button type="submit" id="generateButton" class="action-btn" form="docForm" disabled>
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+        </nav>
+
+
+        <form id="docForm" novalidate>
+            <div class="tab-content">
+
+                <div class="tab-pane active" id="tab1">
+                    <div class="form-group">
+                        <label>1. É um EventMesh?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="eventMeshYes" name="isEventMesh" value="sim">
+                            <label for="eventMeshYes">Sim</label>
+                            <input type="radio" id="eventMeshNo" name="isEventMesh" value="não" checked>
+                            <label for="eventMeshNo">Não</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="packageName">2. Informe o nome do pacote:</label>
+                        <input type="text" id="packageName" name="packageName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>3. Pacote já está em QAS?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="qasYes" name="inQAS" value="sim">
+                            <label for="qasYes">Sim</label>
+                            <input type="radio" id="qasNo" name="inQAS" value="não">
+                            <label for="qasNo">Não</label>
+                        </div>
+
+                        <div id="qasImageUpload" class="form-img-upload hidden">
+                            <label>3.1. Envie a evidência do pacote:</label>
+                            <div class="paste-area" data-field-name="Evidência de QAS" contenteditable="true"
+                                data-placeholder="Arraste ou Cole a Imagem..."></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="iflowName">4. Informe o nome do iFlow:</label>
+                        <input type="text" id="iflowName" name="iflowName" required>
+
+                        <div id="iflowImageUpload" class="form-img-upload">
+                            <label>4.1. Envie a evidência do iFlow:</label>
+                            <div class="paste-area" data-field-name="Evidência do iFlow" contenteditable="true"
+                                data-placeholder="Arraste ou Cole a Imagem..."></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane" id="tab2">
+                    <div class="form-group">
+                        <label>5. Possui API Management?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="apiMgmtYes" name="hasApiMgmt" value="sim">
+                            <label for="apiMgmtYes">Sim</label>
+
+                            <input type="radio" id="apiMgmtNo" name="hasApiMgmt" value="não" checked>
+                            <label for="apiMgmtNo">Não</label>
+                        </div>
+                    </div>
+                    <div id="apiMgmtDetails" class="hidden">
+                        <div class="form-group">
+                            <label for="apiProxy">5.1. Informe a API Proxy:</label>
+                            <input type="text" id="apiProxy" name="apiProxy">
+
+                            <div class="form-img-upload">
+                                <label>5.1.1. Envie a evidência da API Proxy:</label>
+                                <div class="paste-area" id="apiProxyPaste" data-field-name="Evidência da API Proxy"
+                                    contenteditable="true" data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiProduct">5.2. Informe o Product:</label>
+                            <input type="text" id="apiProduct" name="apiProduct">
+
+                            <div class="form-img-upload">
+                                <label>5.2.1. Envie a evidência do Product:</label>
+                                <div class="paste-area" id="apiProductPaste" data-field-name="Evidência do Product"
+                                    contenteditable="true" data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiApplication">5.3. Informe a Application:</label>
+                            <input type="text" id="apiApplication" name="apiApplication">
+
+                            <div class="form-img-upload">
+                                <label>5.3.1. Envie a evidência da Application:</label>
+                                <div class="paste-area" id="apiApplicationPaste"
+                                    data-field-name="Evidência da Application" contenteditable="true"
+                                    data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiKvm">5.4. Informe a Key Value Maps (KVM):</label>
+                            <input type="text" id="apiKvm" name="apiKvm">
+
+                            <div class="form-img-upload">
+                                <label>5.4.1. Envie a evidência da Key Value Maps:</label>
+                                <div class="paste-area" id="apiKvmPaste" data-field-name="Evidência da Key Value Maps"
+                                    contenteditable="true" data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab3">
+                    <div class="form-group">
+                        <label>6. Usuário SAP foi criado?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="sapUserYes" name="sapUserCreated" value="sim" checked>
+                            <label for="sapUserYes">Sim</label>
+                            <input type="radio" id="sapUserNo" name="sapUserCreated" value="não">
+                            <label for="sapUserNo">Não</label>
+                        </div>
+                    </div>
+                    <div class="form-group with-na">
+                        <label for="sapUserCredential">7. Informe o Usuário SAP para atribuição na credencial:</label>
+                        <input type="text" id="sapUserCredential" name="sapUserCredential" required>
+                        <div class="na-option">
+                            <input type="checkbox" id="sapUserNA">
+                            <label for="sapUserNA">N/A</label>
+                        </div>
+                    </div>
+                    <div class="form-group with-na">
+                        <label for="sapEnv">8. Informe Ambiente SAP do usuário:</label>
+                        <input type="text" id="sapEnv" name="sapEnv" required>
+                        <div class="na-option">
+                            <input type="checkbox" id="sapEnvNA">
+                            <label for="sapEnvNA">N/A</label>
+                        </div>
+                    </div>
+                    <div class="form-group with-na">
+                        <label for="userRole">9. Informe o User Role:</label>
+                        <input type="text" id="userRole" name="userRole" list="userRoleSuggestions" required>
+                        <datalist id="userRoleSuggestions"></datalist>
+                        <div class="na-option">
+                            <input type="checkbox" id="userRoleNA">
+                            <label for="userRoleNA">N/A</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>10. CPI?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="cpiYes" name="isCpi" value="sim" checked>
+                            <label for="cpiYes">Sim</label>
+                            <input type="radio" id="cpiNo" name="isCpi" value="não">
+                            <label for="cpiNo">Não</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab4">
+                    <div id="deltaIdGroup" class="form-group">
+                        <label for="deltaId">Informe o ID do Delta:</label>
+                        <input type="text" id="deltaId" name="deltaId" required>
+                    </div>
+
+                    <div id="senderSection" class="form-group hidden">
+                        <h3>Configure > Sender</h3>
+                        <div class="form-group">
+                            <label>11. Envie a evidência do Sender:</label>
+                            <div class="paste-area" data-field-name="Evidência do Sender" contenteditable="true"
+                                data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            <div class="key-value-container" id="sender-key-value-container">
+                                <div class="key-value-pair">
+                                    <div class="form-group-small">
+                                        <label>11.1. Chave:</label>
+                                        <input type="text" id="senderExternalizationName" class="externalization-name"
+                                            value="User Role">
+                                    </div>
+                                    <div class="form-group-small">
+                                        <label>11.2. Valor:</label>
+                                        <input type="text" id="senderExternalizationValue"
+                                            class="externalization-value">
+                                    </div>
+                                    <button type="button" class="add-kv-btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Configure > Receiver</h3>
+                        <label>12. Há externalizações no Receiver?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="receiverYes" name="hasReceiverExternalization" value="sim">
+                            <label for="receiverYes">Sim</label>
+                            <input type="radio" id="receiverNo" name="hasReceiverExternalization" value="não" checked>
+                            <label for="receiverNo">Não</label>
+                        </div>
+                        <div id="receiverEntriesContainer" class="dynamic-entries-container hidden"></div>
+                        <button type="button" id="addReceiverEntry" class="add-entry-btn hidden">
+                            <i class="fa-solid fa-plus"></i> Adicionar nova imagem
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Configure > More</h3>
+                        <label>13. Há externalizações no More?</label>
+                        <div class="radio-group">
+                            <input type="radio" id="moreYes" name="hasMoreExternalization" value="sim">
+                            <label for="moreYes">Sim</label>
+                            <input type="radio" id="moreNo" name="hasMoreExternalization" value="não" checked>
+                            <label for="moreNo">Não</label>
+                        </div>
+                        <div id="moreEntriesContainer" class="dynamic-entries-container hidden"></div>
+                        <button type="button" id="addMoreEntry" class="add-entry-btn hidden">
+                            <i class="fa-solid fa-plus"></i> Adicionar nova imagem
+                        </button>
+                    </div>
+                </div>
+
+                <template id="externalization-entry-template">
+                    <div class="dynamic-entry">
+                        <button type="button" class="remove-entry-btn"><i class="fa-solid fa-times"></i></button>
+                        <div class="form-group">
+                            <label>Envie a evidência:</label>
+                            <div class="paste-area" contenteditable="true"
+                                data-placeholder="Arraste ou Cole a Imagem..."></div>
+                            <div class="key-value-container">
+                                <div class="key-value-pair">
+                                    <div class="form-group-small">
+                                        <label>Chave:</label>
+                                        <input type="text" class="externalization-name">
+                                    </div>
+                                    <div class="form-group-small">
+                                        <label>Valor:</label>
+                                        <input type="text" class="externalization-value">
+                                    </div>
+                                    <button type="button" class="add-kv-btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template id="key-value-pair-template">
+                    <div class="key-value-pair">
+                        <div class="form-group-small">
+                            <input type="text" class="externalization-name" placeholder="Nova chave">
+                        </div>
+                        <div class="form-group-small">
+                            <input type="text" class="externalization-value" placeholder="Novo valor">
+                        </div>
+                        <button type="button" class="remove-kv-btn"><i class="fa-solid fa-trash-alt"></i></button>
+                    </div>
+                </template>
+            </div>
+        </form>
+    </div>
+
+    <div id="api-popup" class="popup">
+        <p><strong>Aviso:</strong> Pacotes com este nome geralmente utilizam <strong>API Management</strong>.</p>
+    </div>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+
+</html>

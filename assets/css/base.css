@@ -1,0 +1,68 @@
+/* RESET E FONTES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+li {
+    list-style: none;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    font-size: 14px;
+}
+
+/* Container principal */
+.container {
+    background: var(--container-bg);
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: var(--container-shadow);
+    width: 100%;
+    max-width: 960px;
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+h1 {
+    text-align: center;
+    color: var(--heading-color);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+h3 {
+    margin-top: 0;
+    color: var(--text-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+button,
+.tab-link,
+.action-btn {
+    font-family: "Poppins", sans-serif;
+}

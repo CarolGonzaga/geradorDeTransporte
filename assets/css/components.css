@@ -1,0 +1,450 @@
+/* --- ESTILOS DO HEADER --- */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    min-width: 30px;
+}
+
+#clearForm {
+    background: #ff4d4f;
+    color: #fff;
+}
+
+#clearForm:hover {
+    background: #d9363e;
+}
+
+#generateButton {
+    background: #007bff;
+    color: white;
+}
+
+#generateButton:hover:enabled {
+    background: #0056b3;
+}
+
+#generateButton:disabled {
+    background-color: #a0cffa;
+    cursor: not-allowed;
+}
+
+#uploadButton {
+    background: #28a745;
+}
+
+#uploadButton:hover {
+    background: #218838;
+}
+
+/* --- ESTILOS DAS ABAS --- */
+.tab-nav {
+    display: flex;
+    gap: 8px;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.tab-link {
+    background: var(--tab-bg);
+    border: none;
+    padding: 6px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--tab-text);
+    transition: all 0.2s ease;
+}
+
+.tab-link.active {
+    background: var(--tab-active-bg);
+    color: var(--tab-active-text);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    font-weight: 600;
+}
+
+.tab-link:hover:not(.active) {
+    background: #e9eff9;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* --- ESTILOS DO FORMULÁRIO --- */
+.form-group {
+    background: var(--input-bg);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: var(--form-shadow);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--label-color);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input);
+    transition: 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+.radio-group label {
+    font-weight: normal;
+    display: inline-block;
+    margin-right: 15px;
+    color: var(--tab-text);
+}
+
+/* --- ÁREA DE UPLOAD / COLAR IMAGEM --- */
+.paste-area {
+    border: 2px dashed var(--paste-border);
+    background: var(--container-bg);
+    padding: 30px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--paste-text);
+    border-radius: 12px;
+    min-height: 120px;
+    cursor: text;
+}
+
+.paste-area:hover {
+    background: var(--paste-hover-bg);
+    border-color: var(--tab-active-bg);
+}
+
+.paste-area img {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-img-upload {
+    margin-top: 30px;
+}
+
+.paste-area:empty::before {
+    content: attr(data-placeholder);
+    color: #aaa;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+input[type="text"],
+textarea,
+.paste-area {
+    font-family: "Roboto Mono", monospace;
+}
+
+/* CLASSE PARA ERRO NAS IMAGENS OBRIGATÓRIAS */
+.paste-area.error {
+    border: 2px dashed #dc3545;
+    background-color: #fff8f8;
+}
+
+.hidden {
+    display: none;
+}
+
+/* --- CAMPOS COM OPÇÃO N/A --- */
+.form-group.with-na {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form-group.with-na>label {
+    flex-basis: 100%;
+}
+
+.form-group.with-na>input[type="text"] {
+    flex: 1 1 60%;
+    margin-right: 25px;
+}
+
+.form-group.with-na .na-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group.with-na .na-option label {
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+/* --- BOTÕES GERAIS --- */
+button {
+    background-color: var(--tab-active-bg);
+    color: var(--tab-active-text);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 20px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--heading-color);
+}
+
+/* --- POPUP --- */
+.popup {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--popup-bg);
+    border: 1px solid var(--popup-border);
+    color: var(--popup-text);
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: opacity 0.5s, visibility 0.5s;
+    font-size: 14px;
+    animation: fadeInDown 0.5s ease;
+}
+
+.popup.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup p {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    padding: 15px;
+    border: 1px dashed var(--label-color);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- TOGGLE DE TEMA --- */
+.theme-switch {
+    width: 60px;
+    height: 30px;
+    position: relative;
+    display: block;
+    background: var(--bg-slider);
+    border-radius: 200px;
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.4), inset 0px -1px 2px rgba(255, 255, 255, 0.13);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider .circle {
+    background-color: var(--bg-circle);
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    top: 4px;
+    transition: .4s;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.slider .icon {
+    font-size: 12px;
+    transition: opacity 0.3s, transform 0.3s;
+    color: var(--circle);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.slider .sun {
+    opacity: 1;
+}
+
+.slider .moon {
+    opacity: 0;
+}
+
+input:checked+.slider {
+    background-color: var(--tab-active-color);
+}
+
+input:checked+.slider .circle {
+    transform: translateX(30px);
+}
+
+input:checked+.slider .sun {
+    opacity: 0;
+}
+
+input:checked+.slider .moon {
+    opacity: 1;
+}
+
+/* --- ESTILOS DA ABA CONFIGURE --- */
+#tab4 h3 {
+    font-size: 16px;
+    color: var(--heading-color);
+    border-bottom: 2px solid var(--input-border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.dynamic-entry {
+    background: var(--container-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+    position: relative;
+}
+
+.add-entry-btn {
+    width: auto;
+    font-size: 14px;
+    padding: 10px 15px;
+    background-color: #28a745;
+    /* Verde */
+    color: white;
+    font-weight: 500;
+}
+
+.add-entry-btn:hover {
+    background-color: #218838;
+}
+
+.remove-entry-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    background-color: #ff4d4f;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.remove-entry-btn:hover {
+    background-color: #d9363e;
+}
+
+input[readonly] {
+    background-color: #e9ecef !important;
+    cursor: not-allowed;
+}
+
+.key-value-pair {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.form-group-small {
+    flex-grow: 1;
+    margin-top: 20px;
+}
+
+.form-group-small label {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.remove-kv-btn {
+    background-color: #ff4d4f;
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0 0 0 auto;
+    flex-shrink: 0;
+}
+
+.remove-kv-btn:hover {
+    background-color: #d9363e;
+}
+
+.add-kv-btn {
+    background-color: #28a745;
+    padding: 0;
+    margin: 0 0 0 auto;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.add-kv-btn:hover {
+    background-color: #218838;
+}

@@ -1,0 +1,76 @@
+:root {
+    /* Claro */
+    --bg-gradient: linear-gradient(135deg, #f0f4f9, #e3e9f3);
+    --text-color: #333;
+    --container-bg: #fff;
+    --container-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    --heading-color: #0056b3;
+    --label-color: #333;
+
+    --input: #fff;
+    --input-bg: #fafbfc;
+    --input-border: #dcdfe6;
+    --input-text: #333;
+    --input-focus-border: #007bff;
+    --input-focus-glow: rgba(0, 123, 255, 0.2);
+
+    --tab-bg: #f4f6fa;
+    --tab-text: #555;
+    --tab-active-bg: #007bff;
+    --tab-active-text: #fff;
+
+    --form-bg: #fafbfc;
+    --form-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    --paste-bg: #f9fafc;
+    --paste-border: #c0c7d1;
+    --paste-text: #888;
+    --paste-hover-bg: #eef3f9;
+
+    --popup-bg: #fffbe6;
+    --popup-border: #ffe58f;
+    --popup-text: #664d03;
+
+    --bg-slider: linear-gradient(135deg, #f0f4f9, #e3e9f3);
+    --bg-circle: #fff;
+    --circle: #888;
+}
+
+body.dark {
+    /* Escuro */
+    --bg-gradient: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+    --text-color: #eee;
+    --container-bg: #2b2b2b;
+    --container-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+    --heading-color: #4da6ff;
+    --label-color: #ddd;
+
+    --input-bg: #3a3a3a;
+    --input-border: #555;
+    --input-text: #fff;
+    --input-focus-border: #007bff;
+    --input-focus-glow: rgba(0, 123, 255, 0.4);
+
+    --tab-bg: #444;
+    --tab-text: #ccc;
+    --tab-active-bg: #007bff;
+    --tab-active-text: #fff;
+
+    --form-bg: #333;
+    --form-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+
+    --paste-bg: #3a3a3a;
+    --paste-border: #555;
+    --paste-text: #bbb;
+    --paste-hover-bg: #444;
+
+    --popup-bg: #333;
+    --popup-border: #555;
+    --popup-text: #eee;
+
+    --bg-slider: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+    --bg-circle: #3a3a3a;
+    --circle: #bbb;
+}
