@@ -182,6 +182,54 @@ textarea,
     font-family: "Roboto Mono", monospace;
 }
 
+/* Botões Radio */
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group label {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+}
+
+.radio-group label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    background: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.radio-group label::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    background: #28a745;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s;
+}
+
+.radio-group input[type="radio"]:checked+label::after {
+    transform: scale(1);
+}
+
+.radio-group input[type="radio"]:checked+label::before {
+    border-color: #28a745;
+}
+
 /* CLASSE PARA ERRO CAMPOS OBRIGATÓRIOS */
 .paste-area.error {
     border: 2px dashed #dc3545;
