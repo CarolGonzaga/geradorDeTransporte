@@ -182,7 +182,7 @@ textarea,
     font-family: "Roboto Mono", monospace;
 }
 
-/* CLASSE PARA ERRO NAS IMAGENS OBRIGATÓRIAS */
+/* CLASSE PARA ERRO CAMPOS OBRIGATÓRIOS */
 .paste-area.error {
     border: 2px dashed #dc3545;
     background-color: #fff8f8;
@@ -190,6 +190,16 @@ textarea,
 
 .hidden {
     display: none;
+}
+
+.form-group.error input[type="text"],
+.form-group.error .paste-area {
+    border: 1px solid #dc3545;
+    background-color: #fff8f8;
+}
+
+.form-group.error label {
+    color: #dc3545;
 }
 
 /* --- CAMPOS COM OPÇÃO N/A --- */

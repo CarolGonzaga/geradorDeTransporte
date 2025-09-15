@@ -1,8 +1,9 @@
 import * as state from "./state.js";
-import { isFormValid } from "./validation.js";
+import { validateAllFields } from "./validation.js";
 import { applyBusinessRules, applyConfigureTabRules } from "./rules.js";
 import { generateExcel } from "./excelGenerator.js";
 
+// Função de troca de abas (versão simples, sem validação)
 function showTab(tabIndex) {
     state.tabPanes.forEach((pane, index) =>
         pane.classList.toggle("active", index === tabIndex)
@@ -12,22 +13,13 @@ function showTab(tabIndex) {
     );
 }
 
-function updateButtonState() {
-    state.generateButton.disabled = !isFormValid(false);
-}
-
+// Função para processar imagens coladas ou arrastadas (converte URLs para base64)
 async function handleImageProcessing(area) {
     setTimeout(async () => {
         const img = area.querySelector("img");
-        if (!img) {
-            updateButtonState();
-            return;
-        }
+        if (!img) return;
         const src = img.src;
-        if (src.startsWith("data:image")) {
-            updateButtonState();
-            return;
-        }
+        if (src.startsWith("data:image")) return;
         if (src.startsWith("http")) {
             img.style.opacity = "0.5";
             try {
@@ -37,23 +29,21 @@ async function handleImageProcessing(area) {
                 reader.onloadend = () => {
                     img.src = reader.result;
                     img.style.opacity = "1";
-                    updateButtonState();
                 };
                 reader.readAsDataURL(blob);
             } catch (error) {
                 console.error("Erro ao converter imagem da URL:", error);
                 alert(
-                    "Não foi possível converter a imagem a partir do link. Tente copiar a imagem em si, e não o link para ela. (Ex: use uma ferramenta de captura de tela)."
+                    "Não foi possível converter a imagem a partir do link. Tente copiar a imagem em si, e não o link para ela."
                 );
                 area.innerHTML = "";
                 img.style.opacity = "1";
-                updateButtonState();
             }
         }
     }, 100);
 }
 
-// --- FUNÇÃO PARA ADICIONAR LINHAS DE CHAVE/VALOR ---
+// Função para adicionar linhas de chave/valor
 function setupKeyValuePairs(container) {
     const addBtn = container.querySelector(".add-kv-btn");
     const kvContainer = container.querySelector(".key-value-container");
@@ -67,17 +57,14 @@ function setupKeyValuePairs(container) {
         const removeBtn = newPair.querySelector(".remove-kv-btn");
         removeBtn.addEventListener("click", () => {
             newPair.remove();
-            updateButtonState();
         });
         kvContainer.appendChild(clone);
-        // Valida o formulário após adicionar
-        updateButtonState();
     };
 
     addBtn.addEventListener("click", addPair);
 }
 
-// --- FUNÇÃO PARA CRIAR AS SEÇÕES DINÂMICAS (IMAGEM + CHAVE/VALOR) ---
+// Função para criar as seções dinâmicas (Imagem + Chave/Valor)
 function setupDynamicSection(radios, container, addButton) {
     const template = document.getElementById("externalization-entry-template");
     const addEntry = () => {
@@ -85,7 +72,7 @@ function setupDynamicSection(radios, container, addButton) {
         const newEntry = clone.querySelector(".dynamic-entry");
 
         const pasteArea = newEntry.querySelector(".paste-area");
-        pasteArea.dataset.required = "true";
+        pasteArea.setAttribute("data-required", "true"); // Marca a área como obrigatória para a validação final
         pasteArea.addEventListener("paste", () =>
             handleImageProcessing(pasteArea)
         );
@@ -93,20 +80,19 @@ function setupDynamicSection(radios, container, addButton) {
             handleImageProcessing(pasteArea)
         );
 
-        const inputs = newEntry.querySelectorAll('input[type="text"]');
-        inputs.forEach((input) => (input.required = true));
+        newEntry
+            .querySelectorAll(".externalization-name, .externalization-value")
+            .forEach((input) => {
+                input.setAttribute("required", "true");
+            });
 
         const removeBtn = newEntry.querySelector(".remove-entry-btn");
         removeBtn.addEventListener("click", () => {
             newEntry.remove();
-            updateButtonState();
         });
 
-        // Inicializa a funcionalidade de adicionar chave/valor para esta nova entrada
         setupKeyValuePairs(newEntry);
-
         container.appendChild(clone);
-        updateButtonState();
     };
 
     radios.forEach((radio) => {
@@ -119,22 +105,38 @@ function setupDynamicSection(radios, container, addButton) {
             } else if (!isSim) {
                 container.innerHTML = "";
             }
-            updateButtonState();
         });
     });
     addButton.addEventListener("click", addEntry);
 }
 
 export function initializeUI() {
-    state.form.addEventListener("input", updateButtonState);
-    state.form.addEventListener("change", updateButtonState);
+    // --- LÓGICA DE VALIDAÇÃO FINAL (BOTÃO GERAR) ---
     state.form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        if (isFormValid(true)) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        // Roda a validação em todos os campos
+        if (validateAllFields()) {
+            // Se tudo estiver válido, gera a planilha
             generateExcel();
+        } else {
+            // Se houver erros, mostra o alerta e foca no primeiro erro encontrado
+            alert(
+                "Preencha todos os campos obrigatórios destacados em vermelho antes de gerar a planilha."
+            );
+            const firstError = document.querySelector("#docForm .error");
+            if (firstError) {
+                const errorTabPane = firstError.closest(".tab-pane");
+                if (errorTabPane) {
+                    const tabId = errorTabPane.id.replace("tab", "");
+                    showTab(parseInt(tabId) - 1);
+                    firstError.querySelector("input, .paste-area")?.focus();
+                }
+            }
         }
     });
 
+    // --- EVENTOS DE UI RESTANTES (SEM VALIDAÇÃO EM TEMPO REAL) ---
     state.tabLinks.forEach((link, index) => {
         link.addEventListener("click", () => showTab(index));
     });
@@ -149,14 +151,11 @@ export function initializeUI() {
         }
     });
 
-    // --- LÓGICA DA ABA CONFIGURE ---
     state.userRoleInput.addEventListener("input", applyConfigureTabRules);
     state.userRoleNA.addEventListener("change", applyConfigureTabRules);
 
-    // Inicializa a seção de chave/valor para o SENDER (Item 11)
     setupKeyValuePairs(document.getElementById("senderSection"));
 
-    // Inicializa as seções dinâmicas (Items 12 e 13)
     setupDynamicSection(
         state.receiverRadios,
         state.receiverEntriesContainer,
@@ -168,7 +167,6 @@ export function initializeUI() {
         state.addMoreEntryBtn
     );
 
-    // Aplica o handler de imagem para todas as áreas de colar que já existem na página
     document.querySelectorAll(".paste-area").forEach((area) => {
         area.addEventListener("paste", () => handleImageProcessing(area));
         area.addEventListener("input", () => handleImageProcessing(area));
@@ -179,17 +177,33 @@ export function initializeUI() {
             const isSim = this.value === "sim";
             state.apiMgmtDetails.classList.toggle("hidden", !isSim);
             state.apiMgmtDetails
-                .querySelectorAll('input[type="text"]')
-                .forEach((input) => (input.required = isSim));
+                .querySelectorAll('input[type="text"], .paste-area')
+                .forEach((input) => {
+                    if (isSim) {
+                        input.setAttribute("required", "true");
+                        if (input.classList.contains("paste-area")) {
+                            input.setAttribute("data-required", "true");
+                        }
+                    } else {
+                        input.removeAttribute("required");
+                        if (input.classList.contains("paste-area")) {
+                            input.removeAttribute("data-required");
+                        }
+                    }
+                });
         });
     });
 
     state.qasRadios.forEach((radio) => {
         radio.addEventListener("change", function () {
-            state.qasImageUpload.classList.toggle(
-                "hidden",
-                this.value !== "não"
-            );
+            const isHidden = this.value !== "não";
+            state.qasImageUpload.classList.toggle("hidden", isHidden);
+            const pasteArea = state.qasImageUpload.querySelector(".paste-area");
+            if (isHidden) {
+                pasteArea.removeAttribute("data-required");
+            } else {
+                pasteArea.setAttribute("data-required", "true");
+            }
         });
     });
 
@@ -200,13 +214,14 @@ export function initializeUI() {
         cb.addEventListener("change", function () {
             const isChecked = this.checked;
             input.disabled = isChecked;
-            input.required = !isChecked;
             if (isChecked) {
+                input.removeAttribute("required");
                 input.value = "N/A";
                 input.style.backgroundColor = "#e9ecef";
             } else {
+                input.setAttribute("required", "true");
                 input.value = "";
-                input.style.backgroundColor = "#fff";
+                input.style.backgroundColor = "";
             }
         });
     });
@@ -219,15 +234,8 @@ export function initializeUI() {
     const themeToggle = document.getElementById("theme-toggle");
     themeToggle.addEventListener("click", () => {
         document.body.classList.toggle("dark");
-        const icon = themeToggle.querySelector("i");
-        if (document.body.classList.contains("dark")) {
-            icon.classList.replace("fa-moon", "fa-sun");
-        } else {
-            icon.classList.replace("fa-sun", "fa-moon");
-        }
     });
 
     // --- INICIALIZAÇÃO VISUAL ---
     showTab(0);
-    updateButtonState();
 }
