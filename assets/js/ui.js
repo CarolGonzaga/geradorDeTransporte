@@ -1,6 +1,6 @@
 import * as state from "./state.js";
 import { validateAllFields } from "./validation.js";
-import { applyBusinessRules, applyConfigureTabRules } from "./rules.js";
+import { applyBusinessRules } from "./rules.js";
 import { generateExcel } from "./excelGenerator.js";
 
 // Função de troca de abas (versão simples, sem validação)
@@ -111,16 +111,11 @@ function setupDynamicSection(radios, container, addButton) {
 }
 
 export function initializeUI() {
-    // --- LÓGICA DE VALIDAÇÃO FINAL (BOTÃO GERAR) ---
     state.form.addEventListener("submit", (event) => {
-        event.preventDefault(); // Impede o envio padrão do formulário
-
-        // Roda a validação em todos os campos
+        event.preventDefault();
         if (validateAllFields()) {
-            // Se tudo estiver válido, gera a planilha
             generateExcel();
         } else {
-            // Se houver erros, mostra o alerta e foca no primeiro erro encontrado
             alert(
                 "Preencha todos os campos obrigatórios destacados em vermelho antes de gerar a planilha."
             );
@@ -136,7 +131,6 @@ export function initializeUI() {
         }
     });
 
-    // --- EVENTOS DE UI RESTANTES (SEM VALIDAÇÃO EM TEMPO REAL) ---
     state.tabLinks.forEach((link, index) => {
         link.addEventListener("click", () => showTab(index));
     });
@@ -150,9 +144,6 @@ export function initializeUI() {
             location.reload();
         }
     });
-
-    state.userRoleInput.addEventListener("input", applyConfigureTabRules);
-    state.userRoleNA.addEventListener("change", applyConfigureTabRules);
 
     setupKeyValuePairs(document.getElementById("senderSection"));
 
@@ -171,6 +162,33 @@ export function initializeUI() {
         area.addEventListener("paste", () => handleImageProcessing(area));
         area.addEventListener("input", () => handleImageProcessing(area));
     });
+
+    // --- LÓGICA PARA O ITEM 11 (SENDER) ---
+    state.senderRadios.forEach((radio) => {
+        radio.addEventListener("change", function () {
+            const isSim = this.value === "sim";
+            state.senderSection.classList.toggle("hidden", !isSim);
+
+            const fields = state.senderSection.querySelectorAll(
+                'input[type="text"], .paste-area'
+            );
+
+            fields.forEach((field) => {
+                if (isSim) {
+                    field.setAttribute("required", "true");
+                    if (field.classList.contains("paste-area")) {
+                        field.setAttribute("data-required", "true");
+                    }
+                } else {
+                    field.removeAttribute("required");
+                    if (field.classList.contains("paste-area")) {
+                        field.removeAttribute("data-required");
+                    }
+                }
+            });
+        });
+    });
+    // ------------------------------------
 
     state.apiMgmtRadios.forEach((radio) => {
         radio.addEventListener("change", function () {
@@ -236,6 +254,5 @@ export function initializeUI() {
         document.body.classList.toggle("dark");
     });
 
-    // --- INICIALIZAÇÃO VISUAL ---
     showTab(0);
 }

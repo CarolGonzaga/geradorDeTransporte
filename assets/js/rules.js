@@ -74,26 +74,4 @@ export function applyBusinessRules() {
             state.apiMgmtNo.dispatchEvent(new Event("change"));
         }
     }
-
-    applyConfigureTabRules();
-}
-
-// Função para controlar a lógica da aba "Configure"
-export function applyConfigureTabRules() {
-    const userRoleValue = state.userRoleInput.value;
-    const isUserRoleNA =
-        state.userRoleNA.checked || userRoleValue.toUpperCase() === "N/A";
-
-    // Regra do item 11 (Sender Section)
-    if (!isUserRoleNA && userRoleValue.trim() !== "") {
-        state.senderSection.classList.remove("hidden");
-        state.senderSection.querySelector(".paste-area").dataset.required =
-            "true"; // Marca para validação
-        state.senderExternalizationValue.value = userRoleValue;
-    } else {
-        state.senderSection.classList.add("hidden");
-        state.senderSection.querySelector(".paste-area").dataset.required =
-            "false";
-        state.senderExternalizationValue.value = "";
-    }
 }
