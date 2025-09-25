@@ -38,10 +38,14 @@ export const userRoleMap = JSON.parse(atob(encodedUserRoleMap));
 export const apiKeywords = ["MANHATTAN", "ADDTAX", "OTM", "PBCS", "PLM"];
 
 // --- Seletores da Aba Configure ---
-export const senderSection = document.getElementById("senderSection");
-export const senderExternalizationValue = document.getElementById(
-    "senderExternalizationValue"
+export const senderRadios = document.querySelectorAll(
+    'input[name="hasSenderExternalization"]'
 );
+export const senderEntriesContainer = document.getElementById(
+    "senderEntriesContainer"
+);
+export const addSenderEntryBtn = document.getElementById("addSenderEntry");
+
 export const receiverRadios = document.querySelectorAll(
     'input[name="hasReceiverExternalization"]'
 );
@@ -49,6 +53,7 @@ export const receiverEntriesContainer = document.getElementById(
     "receiverEntriesContainer"
 );
 export const addReceiverEntryBtn = document.getElementById("addReceiverEntry");
+
 export const moreRadios = document.querySelectorAll(
     'input[name="hasMoreExternalization"]'
 );
@@ -56,7 +61,3 @@ export const moreEntriesContainer = document.getElementById(
     "moreEntriesContainer"
 );
 export const addMoreEntryBtn = document.getElementById("addMoreEntry");
-
-export const senderRadios = document.querySelectorAll(
-    'input[name="hasSenderExternalization"]'
-);

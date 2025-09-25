@@ -77,7 +77,7 @@ export async function buildModel1(workbook, worksheet, data) {
     worksheet.getCell("B27").value = "Configure";
     let currentRow = 28;
     const configureItems = [
-        ...(data.configureData.sender ? [data.configureData.sender] : []),
+        ...data.configureData.sender,
         ...data.configureData.receiver,
         ...data.configureData.more,
     ];

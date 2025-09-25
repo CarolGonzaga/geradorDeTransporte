@@ -80,26 +80,27 @@ export async function generateExcel() {
             },
 
             configureData: {
-                sender: null,
+                sender: [],
                 receiver: [],
                 more: [],
             },
         };
 
-        const senderSection = document.getElementById("senderSection");
-        if (!senderSection.classList.contains("hidden")) {
-            formData.configureData.sender = {
-                image: getImageData(senderSection),
-                keyValues: collectKeyValues(senderSection), // Atualizado
-            };
-        }
+        document
+            .querySelectorAll("#senderEntriesContainer .dynamic-entry")
+            .forEach((entry) => {
+                formData.configureData.sender.push({
+                    image: getImageData(entry),
+                    keyValues: collectKeyValues(entry),
+                });
+            });
 
         document
             .querySelectorAll("#receiverEntriesContainer .dynamic-entry")
             .forEach((entry) => {
                 formData.configureData.receiver.push({
                     image: getImageData(entry),
-                    keyValues: collectKeyValues(entry), // Atualizado
+                    keyValues: collectKeyValues(entry),
                 });
             });
 
@@ -108,7 +109,7 @@ export async function generateExcel() {
             .forEach((entry) => {
                 formData.configureData.more.push({
                     image: getImageData(entry),
-                    keyValues: collectKeyValues(entry), // Atualizado
+                    keyValues: collectKeyValues(entry),
                 });
             });
 

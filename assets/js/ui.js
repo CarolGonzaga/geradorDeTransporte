@@ -148,8 +148,11 @@ export function initializeUI() {
         }
     });
 
-    setupKeyValuePairs(document.getElementById("senderSection"));
-
+    setupDynamicSection(
+        state.senderRadios,
+        state.senderEntriesContainer,
+        state.addSenderEntryBtn
+    );
     setupDynamicSection(
         state.receiverRadios,
         state.receiverEntriesContainer,

@@ -117,7 +117,7 @@ export async function buildModel4(workbook, worksheet, data) {
     worksheet.getCell("B40").value = "Configure";
     let currentRow = 41; // LÓGICA ADICIONADA (iniciando na linha 41)
     const configureItems = [
-        ...(data.configureData.sender ? [data.configureData.sender] : []),
+        ...data.configureData.sender,
         ...data.configureData.receiver,
         ...data.configureData.more,
     ];

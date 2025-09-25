@@ -112,7 +112,7 @@ export async function buildModel3(workbook, worksheet, data) {
     worksheet.getCell("B39").value = "Configure";
     let currentRow = 40; // Inicia na linha correta para este modelo
     const configureItems = [
-        ...(data.configureData.sender ? [data.configureData.sender] : []),
+        ...data.configureData.sender,
         ...data.configureData.receiver,
         ...data.configureData.more,
     ];

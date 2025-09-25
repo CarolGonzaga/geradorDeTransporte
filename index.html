@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Transporte [QAS][PRD]</title>
+    <title>Gerador de Transporte - Home</title>
+
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="assets/images/logo.ico" type="image/x-icon">
 
     <!-- ESTILO -->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -227,30 +230,10 @@
                             <input type="radio" id="senderNo" name="hasSenderExternalization" value="não" checked>
                             <label for="senderNo">Não</label>
                         </div>
-                    </div>
-
-                    <div id="senderSection" class="form-group hidden">
-                        <div class="form-group">
-                            <label>11.1. Envie a evidência do Sender:</label>
-                            <div class="paste-area" data-field-name="Evidência do Sender" contenteditable="true"
-                                data-placeholder="Arraste ou Cole a Imagem..."></div>
-                        </div>
-                        <div class="key-value-container" id="sender-key-value-container">
-                            <div class="key-value-pair">
-                                <div class="form-group-small">
-                                    <label>11.2. Chave:</label>
-                                    <input type="text" id="senderExternalizationName" class="externalization-name"
-                                        value="User Role">
-                                </div>
-                                <div class="form-group-small">
-                                    <label>11.3. Valor:</label>
-                                    <input type="text" id="senderExternalizationValue" class="externalization-value">
-                                </div>
-                                <button type="button" class="add-kv-btn">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <div id="senderEntriesContainer" class="dynamic-entries-container hidden"></div>
+                        <button type="button" id="addSenderEntry" class="add-entry-btn hidden">
+                            <i class="fa-solid fa-plus"></i> Adicionar nova imagem
+                        </button>
                     </div>
 
                     <div class="form-group">
