@@ -26,7 +26,8 @@ export const userRoleInput = document.getElementById("userRole");
 export const sapUserNA = document.getElementById("sapUserNA");
 export const sapEnvNA = document.getElementById("sapEnvNA");
 export const userRoleNA = document.getElementById("userRoleNA");
-export const apiPopup = document.getElementById("api-popup");
+export const infoPopup = document.getElementById("info-popup");
+export const infoPopupMessage = document.getElementById("info-popup-message");
 export const qasRadios = document.querySelectorAll('input[name="inQAS"]');
 
 const encodedUserRoleMap =

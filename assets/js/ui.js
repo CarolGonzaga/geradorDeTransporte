@@ -3,6 +3,20 @@ import { validateAllFields } from "./validation.js";
 import { applyBusinessRules } from "./rules.js";
 import { generateExcel } from "./excelGenerator.js";
 
+// ================= FUNÇÃO REUTILIZÁVEL PARA O POPUP =================
+let popupTimeout;
+
+export function showPopupMessage(message, duration = 5000) {
+    clearTimeout(popupTimeout);
+    state.infoPopupMessage.innerHTML = message;
+    state.infoPopup.classList.add("show");
+
+    popupTimeout = setTimeout(() => {
+        state.infoPopup.classList.remove("show");
+    }, duration);
+}
+// =======================================================================
+
 // Função de troca de abas (versão simples, sem validação)
 function showTab(tabIndex) {
     state.tabPanes.forEach((pane, index) =>
@@ -50,7 +64,6 @@ function setupKeyValuePairs(container) {
     const template = document.getElementById("key-value-pair-template");
 
     if (!addBtn || !kvContainer || !template) return;
-
     const addPair = () => {
         const clone = template.content.cloneNode(true);
         const newPair = clone.querySelector(".key-value-pair");
@@ -72,25 +85,22 @@ function setupDynamicSection(radios, container, addButton) {
         const newEntry = clone.querySelector(".dynamic-entry");
 
         const pasteArea = newEntry.querySelector(".paste-area");
-        pasteArea.setAttribute("data-required", "true"); // Marca a área como obrigatória para a validação final
+        pasteArea.setAttribute("data-required", "true");
         pasteArea.addEventListener("paste", () =>
             handleImageProcessing(pasteArea)
         );
         pasteArea.addEventListener("input", () =>
             handleImageProcessing(pasteArea)
         );
-
         newEntry
             .querySelectorAll(".externalization-name, .externalization-value")
             .forEach((input) => {
                 input.setAttribute("required", "true");
             });
-
         const removeBtn = newEntry.querySelector(".remove-entry-btn");
         removeBtn.addEventListener("click", () => {
             newEntry.remove();
         });
-
         setupKeyValuePairs(newEntry);
         container.appendChild(clone);
     };
@@ -130,11 +140,9 @@ export function initializeUI() {
             }
         }
     });
-
     state.tabLinks.forEach((link, index) => {
         link.addEventListener("click", () => showTab(index));
     });
-
     state.clearFormButton.addEventListener("click", () => {
         if (
             confirm(
@@ -144,7 +152,6 @@ export function initializeUI() {
             location.reload();
         }
     });
-
     setupKeyValuePairs(document.getElementById("senderSection"));
 
     setupDynamicSection(
@@ -157,12 +164,10 @@ export function initializeUI() {
         state.moreEntriesContainer,
         state.addMoreEntryBtn
     );
-
     document.querySelectorAll(".paste-area").forEach((area) => {
         area.addEventListener("paste", () => handleImageProcessing(area));
         area.addEventListener("input", () => handleImageProcessing(area));
     });
-
     // --- LÓGICA PARA O ITEM 11 (SENDER) ---
     state.senderRadios.forEach((radio) => {
         radio.addEventListener("change", function () {
@@ -211,7 +216,6 @@ export function initializeUI() {
                 });
         });
     });
-
     state.qasRadios.forEach((radio) => {
         radio.addEventListener("change", function () {
             const isHidden = this.value !== "não";
@@ -224,7 +228,6 @@ export function initializeUI() {
             }
         });
     });
-
     [state.sapUserNA, state.sapEnvNA, state.userRoleNA].forEach((cb) => {
         const input = cb
             .closest(".with-na")
@@ -244,15 +247,30 @@ export function initializeUI() {
         });
     });
 
-    state.eventMeshRadios.forEach((radio) =>
-        radio.addEventListener("change", applyBusinessRules)
-    );
-    state.packageNameInput.addEventListener("blur", applyBusinessRules);
+    // ================= Listener do Event Mesh ATUALIZADO =================
+    state.eventMeshRadios.forEach((radio) => {
+        radio.addEventListener("change", (event) => {
+            // Mostra o Popup específico do Event Mesh
+            if (event.target.value === "sim" && event.target.checked) {
+                const eventMeshMessage =
+                    "<strong>ATENÇÃO:</strong> Para transportar um <span>AEM</span> é necessário criar <u>3 planilhas diferentes</u>: 1 para o iFlow, 1 para a Fila Principal e 1 para a Fila Morta. Não esqueça de externalizar os nomes das filas <span>'QUEUE NAME'</span>, tanto para a <u>fila principal</u> como para a <u>fila morta (DMQ)</u>.";
+                showPopupMessage(eventMeshMessage, 10000);
+            }
+            // Chama a função de regras, informando que o gatilho foi o 'eventMesh'
+            applyBusinessRules("eventMesh");
+        });
+    });
+
+    // Listener do Nome do Pacote ATUALIZADO
+    state.packageNameInput.addEventListener("blur", () => {
+        // Chama a função de regras, informando que o gatilho foi o 'packageName'
+        applyBusinessRules("packageName");
+    });
+    // ======================================================================
 
     const themeToggle = document.getElementById("theme-toggle");
     themeToggle.addEventListener("click", () => {
         document.body.classList.toggle("dark");
     });
-
     showTab(0);
 }

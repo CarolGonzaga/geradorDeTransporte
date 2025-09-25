@@ -1,4 +1,5 @@
 import * as state from "./state.js";
+import { showPopupMessage } from "./ui.js";
 
 // Funções auxiliares (usadas apenas aqui)
 function setToNA(input, checkbox) {
@@ -18,52 +19,53 @@ function setValue(input, checkbox, value) {
 }
 
 // Função principal de regras de negócio
-export function applyBusinessRules() {
+export function applyBusinessRules(trigger) {
     const isEventMesh = state.eventMeshRadios[0].checked;
     const packageName = state.packageNameInput.value.toUpperCase().trim();
-    if (state.userRoleMap[packageName]) {
-        setValue(
-            state.userRoleInput,
-            state.userRoleNA,
-            state.userRoleMap[packageName]
-        );
-    } else {
-        setValue(state.userRoleInput, state.userRoleNA, "");
-    }
+
+    // Se EventMesh for SIM, desabilita os campos 7, 8 e 9.
     if (isEventMesh) {
-        setToNA(state.sapEnvInput, state.sapEnvNA);
+        setToNA(state.sapUserCredentialInput, state.sapUserNA); // Item 7
+        setToNA(state.sapEnvInput, state.sapEnvNA); // Item 8
+        setToNA(state.userRoleInput, state.userRoleNA); // Item 9
     } else {
-        setValue(state.sapEnvInput, state.sapEnvNA, "NC2CLNT210");
+        // Se for NÃO, aplica as regras padrão para os campos.
+        // Regra para o Item 9 (User Role)
+        if (state.userRoleMap[packageName]) {
+            setValue(
+                state.userRoleInput,
+                state.userRoleNA,
+                state.userRoleMap[packageName]
+            );
+        } else {
+            setValue(state.userRoleInput, state.userRoleNA, "");
+        }
+
+        // Regra para o Item 8 (Ambiente SAP)
+        if (packageName.includes("MDG")) {
+            setValue(state.sapEnvInput, state.sapEnvNA, "S4QCLNT210");
+        } else {
+            setValue(state.sapEnvInput, state.sapEnvNA, "NC2CLNT210");
+        }
+
+        // Regra para o Item 7 (Usuário SAP)
+        if (packageName.includes("PLANTSUITE")) {
+            setToNA(state.sapUserCredentialInput, state.sapUserNA);
+        } else {
+            setValue(state.sapUserCredentialInput, state.sapUserNA, "");
+        }
     }
-    setValue(state.sapUserCredentialInput, state.sapUserNA, "");
-    if (packageName.includes("PLM") && isEventMesh) {
-        setToNA(state.sapUserCredentialInput, state.sapUserNA);
-        setToNA(state.sapEnvInput, state.sapEnvNA);
-        setToNA(state.userRoleInput, state.userRoleNA);
-    } else if (packageName.includes("EVOLUTIO") && !isEventMesh) {
-        setValue(state.sapUserCredentialInput, state.sapUserNA, "");
-        setValue(state.sapEnvInput, state.sapEnvNA, "NC2CLNT210");
-    } else if (packageName.includes("PLM") && !isEventMesh) {
-        setValue(state.sapUserCredentialInput, state.sapUserNA, "");
-        setValue(state.sapEnvInput, state.sapEnvNA, "NC2CLNT210");
-    } else if (packageName.includes("PLANTSUITE") && !isEventMesh) {
-        setToNA(state.sapUserCredentialInput, state.sapUserNA);
-        setToNA(state.sapEnvInput, state.sapEnvNA);
-    } else if (packageName.includes("MDG") && !isEventMesh) {
-        setValue(state.sapUserCredentialInput, state.sapUserNA, "");
-        setValue(state.sapEnvInput, state.sapEnvNA, "S4QCLNT210");
-    } else if (packageName.includes("LIMS") && !isEventMesh) {
-        setValue(state.sapUserCredentialInput, state.sapUserNA, "");
-        setValue(state.sapEnvInput, state.sapEnvNA, "NC2CLNT210");
-    }
+
+    // Regra para exibir o popup de API Management (inalterada)
     const foundKeyword = state.apiKeywords.some((keyword) =>
         packageName.includes(keyword)
     );
-    if (foundKeyword) {
-        state.apiPopup.classList.add("show");
-        setTimeout(() => {
-            state.apiPopup.classList.remove("show");
-        }, 4000);
+    // SÓ MOSTRA o popup se a palavra-chave for encontrada E o gatilho for a mudança do nome do pacote
+    if (foundKeyword && trigger === "packageName") {
+        const apiMessage =
+            "<strong>Aviso:</strong> possivelmente esse transporte terá <span>API Management</span>. </br>Confirme antes do envio!";
+        showPopupMessage(apiMessage);
+
         if (!state.apiMgmtYes.checked) {
             state.apiMgmtYes.checked = true;
             state.apiMgmtYes.dispatchEvent(new Event("change"));

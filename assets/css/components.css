@@ -326,7 +326,16 @@ button:hover {
     color: var(--text-color);
     text-align: center;
     padding: 15px;
-    border: 1px dashed var(--label-color);
+}
+
+.popup p strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.popup p span {
+    font-weight: bold;
 }
 
 @keyframes fadeInDown {
