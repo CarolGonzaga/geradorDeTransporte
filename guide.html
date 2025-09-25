@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia do Usuário - Gerador de Transporte</title>
+
+    <!-- ESTILO -->
+    <link rel="stylesheet" href="assets/css/guide.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- FONTES (Opcional, mas recomendado para consistência) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-btn" title="Voltar ao Gerador">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+            <h1>Guia do Usuário</h1>
+        </header>
+
+        <!-- Aba 1 -->
+        <h2>Aba 1: Pacote e iFlow</h2>
+        <div class="item">
+            <h3>Item 1: Advanced Event Mesh (AEM)</h3>
+            <p>Marque <strong>'Sim'</strong> se sua integração utilizar um AEM.</p>
+            <div class="warning">
+                <strong>Atenção:</strong> Para cada integração com AEM, você deverá gerar <strong>três planilhas
+                    separadas</strong>:
+                <ul>
+                    <li>Uma para o iFlow principal.</li>
+                    <li>Uma para a Fila Principal do AEM.</li>
+                    <li>Uma para a Fila Morta (DMQ) do AEM.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="item">
+            <h3>Item 3: Pacote já está em QAS?</h3>
+            <p>Primeiro, verifique no ambiente de QAS se o pacote da sua integração já existe.</p>
+            <ul>
+                <li>Se o pacote <strong>já existir</strong> em QAS, mantenha a opção <strong>'Sim'</strong>.</li>
+                <li>Se o pacote <strong>não existir</strong> em QAS, marque a opção <strong>'Não'</strong> e anexe uma
+                    evidência que mostre o pacote no ambiente de desenvolvimento.</li>
+            </ul>
+            <img src="assets/images/1.jpg" alt="Exemplo de evidência do pacote em desenvolvimento"
+                class="img-placeholder">
+            <p class="caption">Imagem 1: Pacote visível no ambiente de desenvolvimento.</p>
+        </div>
+        <div class="item">
+            <h3>Item 4: Nome do iFlow e Evidência</h3>
+            <p>Informe o nome exato do iFlow que será transportado e anexe a evidência da sua versão.</p>
+            <div class="warning">
+                <strong>Pontos de Atenção:</strong>
+                <ul>
+                    <li>Apenas <strong>um iFlow</strong> por planilha.</li>
+                    <li>O status do iFlow deve ser <strong>'STARTED'</strong>.</li>
+                    <li>O iFlow <strong>deve ter uma versão salva</strong>. Artefatos em modo 'Draft' não são
+                        transportados.</li>
+                </ul>
+            </div>
+            <p><strong>4.1 Evidência do iFlow:</strong> Anexe uma imagem que mostre claramente o nome do iFlow e sua
+                versão mais recente.</p>
+            <img src="assets/images/2.jpg" alt="Exemplo de evidência do iFlow mostrando a versão"
+                class="img-placeholder">
+            <p class="caption">Imagem 2: Tela do iFlow mostrando o nome e a versão.</p>
+        </div>
+
+        <!-- Aba 2 -->
+        <h2>Aba 2: API Management</h2>
+        <div class="item">
+            <h3>Item 5: Dados da API Management</h3>
+            <p>Se a sua integração utiliza API Management, marque <strong>'Sim'</strong> e preencha os quatro sub-itens
+                obrigatórios: API Proxy, Product, Application e Key Value Maps (KVM).</p>
+            <p>Para cada um deles, informe o nome exato e anexe uma evidência correspondente.</p>
+            <img src="assets/images/3.jpg" alt="Evidência da API Proxy" class="img-placeholder">
+            <img src="assets/images/4.jpg" alt="Evidência do Product" class="img-placeholder">
+            <img src="assets/images/5.jpg" alt="Evidência da Application" class="img-placeholder">
+            <img src="assets/images/6.jpg" alt="Evidência da Key Value Maps" class="img-placeholder">
+        </div>
+
+        <!-- Aba 3 -->
+        <h2>Aba 3: Credenciais e Roles</h2>
+        <div class="item">
+            <h3>Item 7: Usuário SAP para Credencial</h3>
+            <p>Informe o nome da <code>Credential Name</code> configurada dentro do iFlow. Este é o usuário técnico que
+                será usado para a comunicação com outros sistemas.</p>
+        </div>
+        <div class="item">
+            <h3>Item 8: Ambiente SAP do usuário</h3>
+            <p>Informe o ambiente SAP de destino. O valor padrão é <code>NC2CLNT210</code>, mas você deve alterá-lo caso
+                a integração se comunique com um sistema diferente (ex: <code>S4QCLNT210</code>).</p>
+        </div>
+        <div class="item">
+            <h3>Item 9: User Role</h3>
+            <p>Informe a <code>User Role</code> utilizada no iFlow para controle de acesso. O campo já vem preenchido
+                com base no nome do pacote, mas pode ser alterado se a sua configuração for diferente.</p>
+        </div>
+
+        <!-- Aba 4 -->
+        <h2>Aba 4: Configure (Externalizações)</h2>
+        <div class="item">
+            <h3>Item 11: ID do Delta</h3>
+            <p>Preencha com o ID do Delta (Ex: <code>PTM3772</code>, <code>OTC4051</code>). Este ID será usado para
+                nomear o arquivo Excel final, facilitando a organização e o rastreamento.</p>
+        </div>
+        <div class="item">
+            <h3>Itens 12, 13 e 14: Externalizações (Sender, Receiver e More)</h3>
+            <p>Esta seção é usada para documentar os parâmetros que precisam ser alterados entre os ambientes (DEV, QAS,
+                PRD).</p>
+            <div class="warning">
+                <strong>Regra de Ouro: Apenas uma evidência por campo!</strong><br>
+                Nunca anexe duas ou mais imagens na mesma área. Se precisar adicionar múltiplas evidências, use o botão
+                para criar um novo campo de imagem.
+            </div>
+            <img src="assets/images/7.jpg" alt="Exemplo de como não fazer: múltiplas evidências em um só campo."
+                class="img-placeholder">
+            <p class="caption">Evite anexar imagens compostas. Adicione cada evidência em um campo separado.</p>
+
+            <p style="margin-top: 30px;"><strong>Como adicionar múltiplas evidências:</strong></p>
+            <p>Se a sua integração possui múltiplos *Receivers* com externalizações, adicione uma imagem para cada um,
+                mesmo que os valores sejam iguais.</p>
+            <p>1. Clique em <strong>'Adicionar nova imagem'</strong> para criar um novo bloco.</p>
+            <img src="assets/images/8.jpg" alt="Botão para adicionar nova imagem" class="img-placeholder">
+            <p class="caption">Imagem 8: Use este botão para cada nova evidência.</p>
+
+            <p>2. Anexe a evidência de cada tela separadamente.</p>
+            <img src="assets/images/9.jpg" alt="Evidência do primeiro receiver" class="img-placeholder">
+            <p class="caption">Exemplo de evidência para o primeiro Receiver.</p>
+
+            <h4 style="margin-top: 30px;">Preenchendo Chaves e Valores</h4>
+            <p>Abaixo de cada imagem, adicione os pares de <strong>Chave</strong> e <strong>Valor</strong> que precisam
+                ser externalizados.</p>
+            <ul>
+                <li>Utilize os botões laterais ( <code>+</code> para adicionar e lixeira para remover ) mais pares de
+                    Chave/Valor para a mesma imagem.</li>
+            </ul>
+            <img src="assets/images/10.jpg" alt="Campos de chave e valor com botões de adicionar e remover"
+                class="img-placeholder">
+            <p class="caption">Imagem 10: Adicione quantos pares Chave/Valor forem necessários para cada evidência.</p>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/guide.js"></script>
+</body>
+
+</html>

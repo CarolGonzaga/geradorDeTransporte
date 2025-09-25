@@ -30,6 +30,16 @@ header {
     border-radius: 10px;
     transition: all 0.2s ease;
     min-width: 30px;
+    text-decoration: none;
+}
+
+#guideButton {
+    background: #17a2b8;
+    color: white;
+}
+
+#guideButton:hover {
+    background: #138496;
 }
 
 #clearForm {
@@ -278,7 +288,8 @@ textarea,
 }
 
 /* --- BOTÕES GERAIS --- */
-button {
+button,
+a {
     background-color: var(--tab-active-bg);
     color: var(--tab-active-text);
     padding: 12px 20px;
@@ -292,7 +303,8 @@ button {
     transition: all 0.2s ease;
 }
 
-button:hover {
+button:hover,
+a:hover {
     background-color: var(--heading-color);
 }
 
